@@ -125,18 +125,18 @@ function convertToRomanNumerals(num) {
   }
 
   while (num2 > 0) {
-    if (num2 === 9) {
-      result += romanNumerals[9];
-      num2 -= 9;
-    } else if (num2 === 4) {
-      result += romanNumerals[4];
-      num2 -= 4;
-    } else if (num2 >= 10) {
+    if (num2 >= 10) {
       result += romanNumerals[10];
       num2 -= 10;
+    } else if (num2 === 9) {
+      result += romanNumerals[9];
+      num2 -= 9;
     } else if (num2 >= 5) {
       result += romanNumerals[5];
       num2 -= 5;
+    } else if (num2 === 4) {
+      result += romanNumerals[4];
+      num2 -= 4;
     } else {
       result += romanNumerals[1];
       num2 -= 1;
@@ -330,8 +330,49 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const matrix = [];
+
+  for (let i = 0; i < size; i += 1) {
+    matrix[i] = [];
+    for (let j = 0; j < size; j += 1) {
+      matrix[i][j] = 0;
+    }
+  }
+
+  let num = 1;
+  let topRow = 0;
+  let rightCol = size - 1;
+  let bottomRow = size - 1;
+  let leftCol = 0;
+
+  while (topRow <= bottomRow) {
+    for (let i = leftCol; i <= rightCol; i += 1) {
+      matrix[topRow][i] = num;
+      num += 1;
+    }
+    topRow += 1;
+
+    for (let i = topRow; i <= bottomRow; i += 1) {
+      matrix[i][rightCol] = num;
+      num += 1;
+    }
+    rightCol -= 1;
+
+    for (let i = rightCol; i >= leftCol; i -= 1) {
+      matrix[bottomRow][i] = num;
+      num += 1;
+    }
+    bottomRow -= 1;
+
+    for (let i = bottomRow; i >= topRow; i -= 1) {
+      matrix[i][leftCol] = num;
+      num += 1;
+    }
+    leftCol += 1;
+  }
+
+  return matrix;
 }
 
 /**
