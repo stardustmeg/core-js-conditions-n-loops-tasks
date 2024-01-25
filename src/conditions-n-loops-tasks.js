@@ -427,40 +427,53 @@ function rotateMatrix(/* matrix */) {
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
 function sortByAsc(arr) {
-  function merge(left, right) {
-    const result = [];
-    let leftIndex = 0;
-    let rightIndex = 0;
+  if (arr.length <= 1) {
+    return arr;
+  }
 
-    while (leftIndex < left.length && rightIndex < right.length) {
-      if (left[leftIndex] < right[rightIndex]) {
-        result.push(left[leftIndex]);
+  const merge = (start, middle, end) => {
+    const result = [];
+    let leftIndex = start;
+    let rightIndex = middle;
+
+    while (leftIndex < middle && rightIndex < end) {
+      if (arr[leftIndex] <= arr[rightIndex]) {
+        result[result.length] = arr[leftIndex];
         leftIndex += 1;
       } else {
-        result.push(right[rightIndex]);
+        result[result.length] = arr[rightIndex];
         rightIndex += 1;
       }
     }
 
-    return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
-  }
-
-  function mergeSort(array) {
-    const { length } = array;
-
-    if (length <= 1) {
-      return array;
+    for (let i = leftIndex; i < middle; i += 1) {
+      result[result.length] = arr[i];
+    }
+    for (let i = rightIndex; i < end; i += 1) {
+      result[result.length] = arr[i];
     }
 
-    const middle = Math.floor(length / 2);
+    for (let i = start, j = 0; i < end; i += 1, j += 1) {
+      const arr2 = arr;
+      arr2[i] = result[j];
+    }
+  };
 
-    const left = array.slice(0, middle);
-    const right = array.slice(middle);
+  const mergeSort = (start = 0, end = arr.length) => {
+    if (end - start <= 1) {
+      return;
+    }
 
-    return merge(mergeSort(left), mergeSort(right));
-  }
+    const middle = Math.floor((start + end) / 2);
 
-  return mergeSort(arr);
+    mergeSort(start, middle);
+    mergeSort(middle, end);
+    merge(start, middle, end);
+  };
+
+  mergeSort();
+
+  return arr;
 }
 
 /**
