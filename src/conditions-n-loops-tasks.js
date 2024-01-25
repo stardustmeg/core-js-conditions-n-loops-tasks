@@ -305,10 +305,28 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
-}
+function getBalanceIndex(arr) {
+  const { length } = arr;
 
+  let totalSum = 0;
+  let leftSum = 0;
+
+  for (let i = 0; i < length; i += 1) {
+    totalSum += arr[i];
+  }
+
+  for (let i = 0; i < length - 1; i += 1) {
+    totalSum -= arr[i];
+
+    if (leftSum === totalSum) {
+      return i;
+    }
+
+    leftSum += arr[i];
+  }
+
+  return -1;
+}
 /**
  * Generates a spiral matrix of a given size, filled with numbers in ascending order starting from one.
  * The direction of filling with numbers is clockwise.
@@ -408,8 +426,41 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  function merge(left, right) {
+    const result = [];
+    let leftIndex = 0;
+    let rightIndex = 0;
+
+    while (leftIndex < left.length && rightIndex < right.length) {
+      if (left[leftIndex] < right[rightIndex]) {
+        result.push(left[leftIndex]);
+        leftIndex += 1;
+      } else {
+        result.push(right[rightIndex]);
+        rightIndex += 1;
+      }
+    }
+
+    return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+  }
+
+  function mergeSort(array) {
+    const { length } = array;
+
+    if (length <= 1) {
+      return array;
+    }
+
+    const middle = Math.floor(length / 2);
+
+    const left = array.slice(0, middle);
+    const right = array.slice(middle);
+
+    return merge(mergeSort(left), mergeSort(right));
+  }
+
+  return mergeSort(arr);
 }
 
 /**
